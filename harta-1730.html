@@ -178,7 +178,7 @@
 }
 #iezuiti-1730-wrap .h-overlay.is-open { opacity: 1; pointer-events: auto; }
 #iezuiti-1730-wrap .h-card {
-  position: relative; width: min(980px, 100%); max-height: 100%; overflow: auto;
+  position: relative; width: min(980px, 100%); max-height: 100%; overflow: auto; overscroll-behavior: contain;
   background: linear-gradient(180deg, var(--c-parch-1) 0%, var(--c-parch-2) 100%); color: var(--c-ink);
   border: 1px solid var(--c-bronze); box-shadow: 0 24px 60px rgba(0, 0, 0, .45), inset 0 0 0 6px rgba(168, 113, 44, .18);
   transform: translateY(24px) scale(.97); transition: transform .35s cubic-bezier(.2, .8, .3, 1);
@@ -471,6 +471,9 @@
   }
 
   mapEl.addEventListener("wheel", function (e) {
+    // Modalul e în interiorul hărții: rotița deasupra lui derulează textul („Află mai multe”),
+    // nu face zoom pe harta din spate — altfel preventDefault() bloca derularea cardului.
+    if (overlay.contains(e.target)) return;
     e.preventDefault();
     setZoom(state.zoom + (-e.deltaY * 0.0018) * state.zoom);
   }, { passive: false });
